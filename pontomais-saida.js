@@ -1,18 +1,17 @@
 // ==UserScript==
 // @name         Pontomais Saída
-// @match        https://app2.pontomais.com.br/meu-ponto
-// @run-at       document-body
+// @match        https://app2.pontomais.com.br/*
 // @description  Mostra hora de saída no WebApp Pontomais
 // @version      0.1
 // ==/UserScript==
 const MSEC_TO_MIN = 60_000;
-const CHECK_LOADED_INTERVAL = 2000; //mseconds
+const CHECK_LOADED_INTERVAL = 3000; //mseconds
 
 
 (function() {
     'use strict';
 
-    console.log("'Pontomais Saída' loaded");
+    console.log("'Pontomais Saída' iniciado.");
 
     const intervalId = setInterval(() => {
         let inOutTodayElement = document.querySelector('table tr td[aria-colindex="5"] span')
@@ -25,7 +24,7 @@ const CHECK_LOADED_INTERVAL = 2000; //mseconds
         let clocks = parseTodayClockRecords(inOutTodayElement);
 
         if (clocks.length != 3) {
-            console.log("Could not load records");
+            console.log("'Retorno do almoço' não encontrado.");
             return;
         }
 
@@ -61,4 +60,3 @@ function displayClockOut(outDate) {
     let clockOutText = `${outDate.getHours()}:${outDate.getMinutes()}`;
     clockOutElement.setHTML(`<span style="color:red">🌇 ${clockOutText}</span>`);
 }
-
