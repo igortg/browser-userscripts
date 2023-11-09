@@ -58,5 +58,5 @@ function calculateClockOut(clocks) {
 function displayClockOut(outDate) {
     let clockOutElement = document.querySelector('table tr td[aria-colindex="9"] div > div');
     let clockOutText = `${outDate.getHours()}:${outDate.getMinutes()}`;
-    clockOutElement.setHTML(`<span style="color:red">🌇 ${clockOutText}</span>`);
+    clockOutElement.innerHTML = `<span style="color:red">🌇 ${clockOutText}</span>`;
 }
