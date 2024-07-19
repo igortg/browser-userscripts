@@ -6,7 +6,7 @@
 // ==/UserScript==
 const MSEC_TO_MIN = 60_000;
 const CHECK_LOADED_INTERVAL = 3000; //mseconds
-
+const zeroPad = (num, places) => String(num).padStart(places, '0');
 
 (function() {
     'use strict';
@@ -57,6 +57,6 @@ function calculateClockOut(clocks) {
 
 function displayClockOut(outDate) {
     let clockOutElement = document.querySelector('table tr td[aria-colindex="9"] div > div');
-    let clockOutText = `${outDate.getHours()}:${outDate.getMinutes()}`;
-    clockOutElement.innerHTML = `<span style="color:red">🌇 ${clockOutText}</span>`;
+    let clockOutText = `${outDate.getHours()}:${zeroPad(outDate.getMinutes(), 2)}`;
+    clockOutElement.innerHTML = `<span style="font-weight: bolder">🌇 ${clockOutText}</span>`;
 }
