@@ -2,7 +2,7 @@
 // @name         Pontomais Saída
 // @match        https://app2.pontomais.com.br/*
 // @description  Mostra hora de saída no WebApp Pontomais
-// @version      0.1
+// @version      0.2
 // ==/UserScript==
 const MSEC_TO_MIN = 60_000;
 const CHECK_LOADED_INTERVAL = 3000; //mseconds
@@ -23,8 +23,8 @@ const zeroPad = (num, places) => String(num).padStart(places, '0');
 
         let clocks = parseTodayClockRecords(inOutTodayElement);
 
-        if (clocks.length != 3) {
-            console.log("'Retorno do almoço' não encontrado.");
+        if ((clocks.length < 3) || (clocks.lenght % 2 == 0)) {
+            console.log("Batidas insuficientes ou dia já finalizado");
             return;
         }
 
@@ -42,16 +42,19 @@ function parseTodayClockRecords(inOutTodayElement) {
 
 
 function calculateClockOut(clocks) {
-    let inClock = new Date(`0 ${clocks[0]}`);
-    let lunchOutClock = new Date(`0 ${clocks[1]}`);
-    let lunchInClock = new Date(`0 ${clocks[2]}`);
+    let workTime = 0
+    for (let i = 0; i < Math.round(clocks.length / 2); i+=2) {
+        let inClock = new Date(`0 ${clocks[i]}`);
+        let outClock = new Date(`0 ${clocks[i+1]}`);
 
-    let morning = (lunchOutClock - inClock) / MSEC_TO_MIN;
-    let expectedAfternoonMin = 480 - morning;
-    // Sum `expectedAfternoonMin` to lunchInClock and return.
-    let outClock = new Date(lunchInClock.getTime());
-    outClock.setTime(lunchInClock.getTime() + expectedAfternoonMin * MSEC_TO_MIN);
-    return outClock;
+        workTime += (outClock - inClock) / MSEC_TO_MIN;
+    }
+    let lastClock = new Date(`0 ${clocks[clocks.length - 1]}`);
+
+    let expectedOutMin = 480 - workTime;
+    let expectedOutClock = new Date(lastClock.getTime());
+    expectedOutClock.setTime(expectedOutClock.getTime() + expectedOutMin * MSEC_TO_MIN);
+    return expectedOutClock;
 }
 
 
