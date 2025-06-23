@@ -2,13 +2,13 @@
 // @name         Pontomais Saída
 // @match        https://app2.pontomais.com.br/*
 // @description  Mostra hora de saída no WebApp Pontomais
-// @version      0.2
+// @version      0.2.1
 // ==/UserScript==
 const MSEC_TO_MIN = 60_000;
 const CHECK_LOADED_INTERVAL = 3000; //mseconds
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 
-(function() {
+function main() {
     'use strict';
 
     console.log("'Pontomais Saída' iniciado.");
@@ -23,7 +23,7 @@ const zeroPad = (num, places) => String(num).padStart(places, '0');
 
         let clocks = parseTodayClockRecords(inOutTodayElement);
 
-        if ((clocks.length < 3) || (clocks.lenght % 2 == 0)) {
+        if ((clocks.length < 3) || (clocks.length % 2 == 0)) {
             console.log("Batidas insuficientes ou dia já finalizado");
             return;
         }
@@ -32,7 +32,7 @@ const zeroPad = (num, places) => String(num).padStart(places, '0');
         displayClockOut(clockOut);
     }, CHECK_LOADED_INTERVAL)
 
-})();
+}
 
 
 function parseTodayClockRecords(inOutTodayElement) {
@@ -43,7 +43,7 @@ function parseTodayClockRecords(inOutTodayElement) {
 
 function calculateClockOut(clocks) {
     let workTime = 0
-    for (let i = 0; i < Math.round(clocks.length / 2); i+=2) {
+    for (let i = 0; i < clocks.length - 1; i+=2) {
         let inClock = new Date(`0 ${clocks[i]}`);
         let outClock = new Date(`0 ${clocks[i+1]}`);
 
@@ -63,3 +63,6 @@ function displayClockOut(outDate) {
     let clockOutText = `${outDate.getHours()}:${zeroPad(outDate.getMinutes(), 2)}`;
     clockOutElement.innerHTML = `<span style="font-weight: bolder">🌇 ${clockOutText}</span>`;
 }
+
+
+main();
