@@ -2,7 +2,7 @@
 // @name         Pontomais Saída
 // @match        https://app2.pontomais.com.br/*
 // @description  Mostra hora de saída no WebApp Pontomais
-// @version      0.2.1
+// @version      0.2.2
 // ==/UserScript==
 const MSEC_TO_MIN = 60_000;
 const CHECK_LOADED_INTERVAL = 3000; //mseconds
@@ -37,7 +37,8 @@ function main() {
 
 function parseTodayClockRecords(inOutTodayElement) {
     let inOutText = inOutTodayElement.attributes.title.value;
-    return inOutText.split(' - ');
+    let records = inOutText.split(' - ');
+    return records.sort()
 }
 
 
